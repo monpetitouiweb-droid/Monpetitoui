@@ -1,0 +1,4 @@
+# No pongas claves en el código. Mira https://docs.stripe.com/keys-best-practices
+# Consíguela en el Dashboard de Stripe -> https://dashboard.stripe.com/test/apikeys
+# Solo la clave SECRETA va aquí (variable de servidor). La clave publicable va en public/index.html (STRIPE_PK).
+STRIPE_SECRET_KEY=sk_test_...
