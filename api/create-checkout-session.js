@@ -1,18 +1,22 @@
 const { Stripe } = require("stripe");
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Los precios se calculan aquí, en el servidor, nunca con datos del navegador.
 const BASE = 150;
-const PAGINA_EXTRA = 40;
+const PAGINA_EXTRA = 20;
 const IDIOMA_EXTRA = 50;
-const DISENOS = ["Sombras", "Tinta", "Hilo", "Japón", "Cera", "Bordado", "Mediterráneo"];
+const DISENOS = ["Sombras", "Tinta", "Hilo", "Japón", "Cera", "Bordado", "Mediterráneo", "Tiza"];
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "Método no permitido" });
   }
+  if (!process.env.STRIPE_SECRET_KEY || !process.env.DOMAIN) {
+    console.error("Faltan variables en Vercel: STRIPE_SECRET_KEY y/o DOMAIN");
+    return res.status(500).json({ error: "Faltan variables de configuración en Vercel" });
+  }
   try {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const b = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const diseno = String(b.design || "");
     const paginas = Number(b.pages);
